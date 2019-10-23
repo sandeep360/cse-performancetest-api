@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="8946cd9b-83df-43ea-97a3-43d7b7267c68" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="healthcheck-api-flow" doc:id="aa1f2ce5-da89-4b8a-bf4d-fe97945f6202" >
+		<http:listener doc:name="Listener /heathcheck" doc:id="f413a547-63d0-4c13-bc52-cbc24b8dc844" config-ref="HTTP_Listener_config" path="/healthcheck"/>
+		<logger level="INFO" doc:name="INFO" doc:id="624b685b-83f1-485a-9775-53871cd1f72f" message='FlowName: "#[flow.name]"  Health Check call'/>
+		<set-payload value='#[%dw 2.0
+output application/json
+---
+{
+     "status" : "Mule is up and running"
+ 
+ }]' doc:name="Set Payload" doc:id="def9b667-757b-4698-940c-658d8ffd9933" />
+	</flow>
+</mule>
